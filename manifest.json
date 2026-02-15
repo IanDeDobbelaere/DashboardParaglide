@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Dashboard CameraPath",
+  "icons": {
+   "16": "logo-16.png",
+   "32": "logo-32.png",
+   "48": "logo-48.png",
+   "128": "logo-128.png"
+  },
+  "version": "1.0",
+  "description": "Record and play cinematic camera paths in Cesium apps.",
+  "permissions": ["storage"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["guest.js"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
