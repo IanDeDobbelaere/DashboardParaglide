@@ -96,11 +96,19 @@ window.CesiumPathEngine = {
         });
     },
 
+    stopPlayback() {
+        this.playbackStopped = true;
+        window.postMessage({ type: "PLAYBACK_STATE", active: false }, "*");
+    },
+
     // --- 3. THE CINEMATIC ENGINE ---
     runCinematicEngine(points) {
+        this.playbackStopped = false;
+        window.postMessage({ type: "PLAYBACK_STATE", active: true }, "*");
         let t = 0; 
         const v = this.viewer;
         const totalPoints = points.length;
+        const engine = this;
 
         // Spline Interpolation (Catmull-Rom)
         const interpolate = (p0, p1, p2, p3, t) => {
@@ -126,7 +134,7 @@ window.CesiumPathEngine = {
         };
 
         const animate = () => {
-            // STOP condition
+            if (engine.playbackStopped) return;
             if (window.CesiumPathEngine.keyframes.length === 0) return;
             
             // Calculate Global Progress (0.0 to 1.0)
@@ -134,6 +142,7 @@ window.CesiumPathEngine = {
 
             if (globalProgress >= 1.0) {
                 console.log("Path Complete");
+                window.postMessage({ type: "PLAYBACK_STATE", active: false }, "*");
                 return;
             }
 
@@ -200,6 +209,7 @@ if (!window.cesiumListenerAttached) {
             }
             if (cmd === "RECORD") engine.recordKeyframe();
             if (cmd === "PLAY") engine.playPath();
+            if (cmd === "STOP") engine.stopPlayback();
             if (cmd === "SPIN") engine.toggleSpin();
             if (cmd === "REVISIT") engine.revisitPoint(data.index);
             if (cmd === "DELETE") engine.deletePoint(data.index);

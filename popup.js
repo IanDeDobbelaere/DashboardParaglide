@@ -41,6 +41,7 @@ function applySpeed(rawValue) {
     const clamped = Math.max(1, Math.min(100, parseInt(rawValue, 10) || 1));
     speedSlider.value = clamped;
     speedNumber.value = clamped;
+    chrome.storage.local.set({ playbackSpeedRaw: clamped });
     sendCmd("SET_SPEED", { value: clamped / 10000 });
 }
 
@@ -57,8 +58,19 @@ const overlayEl = document.getElementById('clapperboard-overlay');
 const countdownEl = document.getElementById('clapperboard-countdown');
 const flashEl = document.getElementById('clapperboard-flash');
 
-chrome.storage.local.get(['clapperboardEnabled'], (res) => {
+const playStopBtn = document.getElementById('play-stop');
+let playbackActive = false;
+
+function updatePlayStopButton() {
+    playStopBtn.textContent = playbackActive ? "STOP" : "PLAY PATH";
+    playStopBtn.classList.toggle("play-btn", !playbackActive);
+}
+
+chrome.storage.local.get(['clapperboardEnabled', 'playbackSpeedRaw', 'playbackActive'], (res) => {
     syncToggle.checked = !!res.clapperboardEnabled;
+    if (res.playbackSpeedRaw != null) applySpeed(res.playbackSpeedRaw);
+    playbackActive = !!res.playbackActive;
+    updatePlayStopButton();
 });
 syncToggle.onchange = () => {
     chrome.storage.local.set({ clapperboardEnabled: syncToggle.checked });
@@ -89,11 +101,15 @@ function runClapperboardThenPlay() {
 }
 
 document.getElementById('rec').onclick = () => sendCmd("RECORD");
-document.getElementById('play').onclick = () => {
-    if (syncToggle.checked) {
-        runClapperboardThenPlay();
+playStopBtn.onclick = () => {
+    if (playbackActive) {
+        sendCmd("STOP");
     } else {
-        sendCmd("PLAY");
+        if (syncToggle.checked) {
+            runClapperboardThenPlay();
+        } else {
+            sendCmd("PLAY");
+        }
     }
 };
 document.getElementById('spin').onclick = () => sendCmd("SPIN");
@@ -103,6 +119,10 @@ document.getElementById('clear-all').onclick = () => sendCmd("CLEAR_ALL");
 chrome.storage.local.get(['keyframes'], (res) => renderList(res.keyframes || []));
 chrome.storage.onChanged.addListener((changes) => {
     if (changes.keyframes) renderList(changes.keyframes.newValue);
+    if (changes.playbackActive) {
+        playbackActive = !!changes.playbackActive.newValue;
+        updatePlayStopButton();
+    }
 });
 
 // Import / Export

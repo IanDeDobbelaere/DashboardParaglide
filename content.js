@@ -13,11 +13,14 @@ if (!window.cesiumBridgeLoaded) {
         if (event.data.type === "SYNC_DATA") {
             chrome.storage.local.set({ keyframes: event.data.keyframes });
         }
+        if (event.data.type === "PLAYBACK_STATE") {
+            chrome.storage.local.set({ playbackActive: event.data.active });
+        }
     });
 
     // 3. Listen for Commands FROM the Popup
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-        const allowed = ["RECORD", "PLAY", "SPIN", "REVISIT", "DELETE", "CLEAR_ALL", "IMPORT", "SET_SPEED"];
+        const allowed = ["RECORD", "PLAY", "STOP", "SPIN", "REVISIT", "DELETE", "CLEAR_ALL", "IMPORT", "SET_SPEED"];
         if (allowed.includes(request.command)) {
             window.postMessage({ type: "FROM_EXTENSION", ...request }, "*");
         }

@@ -1,173 +1,173 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-  body { 
-    width: 280px; min-height: 320px; padding: 0; margin: 0; 
-    font-family: 'Inter', sans-serif; background: #1a1a1a; color: #efefef;
-    position: relative;
-    display: flex;
-    flex-direction: column;
+  <style>
+    body { 
+      width: 280px; min-height: 320px; padding: 0; margin: 0; 
+      font-family: 'Inter', sans-serif; background: #1a1a1a; color: #efefef;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Icons & Logo */
+    .logo-area { display: flex; align-items: center; gap: 4px; }
+    .logo-icon { width: 18px; height: 18px; filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(359deg) brightness(102%) contrast(107%); }
+    .icon-svg-sm { width: 16px; height: 16px; filter: invert(0.8); margin-right: 4px; }
+    .icon-svg-red { width: 16px; height: 16px; filter: invert(27%) sepia(91%) saturate(2352%) hue-rotate(331deg) brightness(95%) contrast(105%); }
+
+    /* Header Section */
+    .header { 
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px; background: #111; border-bottom: 1px solid #333;
+    }
+    .logo-text { font-size: 14px; font-weight: 700; color: #fff; }
+    .logo-text span { color: #ff5500; font-weight: 300; margin-left: 4px; }
+    .icon-link { background: transparent; border: none; color: #888; font-size: 16px; cursor: pointer; display: flex; align-items: center; font-weight: 600; }
+
+    /* Control Panel */
+    .controls { padding: 12px; background: #222; }
+    .control-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .control-row:last-child { margin-bottom: 0; }
+    .control-label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 1px; flex-shrink: 0; }
+    .capture-btn { width: 100%; margin-bottom: 12px; border: 1px solid #ff5500 !important; color: #ff5500 !important; }
+    .speed-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+    .speed-row .control-label { margin-bottom: 0; }
+    input[type=range] { accent-color: #ff5500; flex: 1; min-width: 0; }
+    input[type=number] {
+      width: 48px; text-align: center; font-size: 12px;
+      background: #333; color: #eee; border: 1px solid #555; border-radius: 4px;
+      padding: 6px 4px; box-sizing: border-box;
+    }
+    input[type=number]:focus { outline: none; border-color: #ff5500; }
+
+    /* Point List: grows to push footer to bottom when empty */
+    #keyframe-list { flex: 1; min-height: 0; max-height: 220px; overflow-y: auto; }
+    .kf-row { 
+      display: flex; justify-content: space-between; align-items: center; 
+      padding: 10px 16px; border-bottom: 1px solid #2a2a2a;
+      transition: background 0.2s;
+    }
+    .kf-row:hover { background: #252525; }
+    .kf-info { display: flex; align-items: center; gap: 10px; }
+    .kf-diamond { width: 8px; height: 8px; background: #ff5500; transform: rotate(45deg); }
+    .kf-name { font-size: 12px; font-weight: 500; }
+
+    /* Action Buttons */
+    button { 
+      cursor: pointer; border: none; border-radius: 4px; 
+      transition: all 0.2s; background: transparent; color: #ccc;
+    }
+    .btn-main { background: #333; padding: 8px 16px; font-size: 12px; color: #fff; border: 1px solid #444; }
+    .btn-main:hover { background: #444; border-color: #ff5500; }
+    .play-btn { flex: 2; background: #ff5500 !important; color: white !important; border: none !important; }
+    .btn-trash { flex: 0.5; display: flex; justify-content: center; align-items: center; }
+
+    .btn-fly { color: #ff5500; font-size: 11px; font-weight: bold; padding: 4px 8px; }
+    .btn-del-small { color: #666; font-size: 14px; margin-left: 8px; }
+    .btn-del-small:hover { color: #ff4444; }
+
+    /* Footer Section */
+    .footer { 
+      display: flex; gap: 8px; padding: 12px; 
+      background: #111; border-top: 1px solid #333; 
+    }
+
+    .icon-svg-white {
+      width: 12px;
+      height: 12px;
+      filter: invert(0.95); /* Turns black to off-white */
+      opacity: 0.6;
+      transition: opacity 0.2s;
   }
-  
-  /* Icons & Logo */
-  .logo-area { display: flex; align-items: center; gap: 4px; }
-  .logo-icon { width: 18px; height: 18px; filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(359deg) brightness(102%) contrast(107%); }
-  .icon-svg-sm { width: 16px; height: 16px; filter: invert(0.8); margin-right: 4px; }
-  .icon-svg-red { width: 16px; height: 16px; filter: invert(27%) sepia(91%) saturate(2352%) hue-rotate(331deg) brightness(95%) contrast(105%); }
 
-  /* Header Section */
-  .header { 
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 12px; background: #111; border-bottom: 1px solid #333;
-  }
-  .logo-text { font-size: 14px; font-weight: 700; color: #fff; }
-  .logo-text span { color: #ff5500; font-weight: 300; margin-left: 4px; }
-  .icon-link { background: transparent; border: none; color: #888; font-size: 16px; cursor: pointer; display: flex; align-items: center; font-weight: 600; }
-
-  /* Control Panel */
-  .controls { padding: 12px; background: #222; }
-  .control-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .control-row:last-child { margin-bottom: 0; }
-  .control-label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 1px; flex-shrink: 0; }
-  .capture-btn { width: 100%; margin-bottom: 12px; border: 1px solid #ff5500 !important; color: #ff5500 !important; }
-  .speed-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
-  .speed-row .control-label { margin-bottom: 0; }
-  input[type=range] { accent-color: #ff5500; flex: 1; min-width: 0; }
-  input[type=number] {
-    width: 48px; text-align: center; font-size: 12px;
-    background: #333; color: #eee; border: 1px solid #555; border-radius: 4px;
-    padding: 6px 4px; box-sizing: border-box;
-  }
-  input[type=number]:focus { outline: none; border-color: #ff5500; }
-
-  /* Point List: grows to push footer to bottom when empty */
-  #keyframe-list { flex: 1; min-height: 0; max-height: 220px; overflow-y: auto; }
-  .kf-row { 
-    display: flex; justify-content: space-between; align-items: center; 
-    padding: 10px 16px; border-bottom: 1px solid #2a2a2a;
-    transition: background 0.2s;
-  }
-  .kf-row:hover { background: #252525; }
-  .kf-info { display: flex; align-items: center; gap: 10px; }
-  .kf-diamond { width: 8px; height: 8px; background: #ff5500; transform: rotate(45deg); }
-  .kf-name { font-size: 12px; font-weight: 500; }
-
-  /* Action Buttons */
-  button { 
-    cursor: pointer; border: none; border-radius: 4px; 
-    transition: all 0.2s; background: transparent; color: #ccc;
-  }
-  .btn-main { background: #333; padding: 8px 16px; font-size: 12px; color: #fff; border: 1px solid #444; }
-  .btn-main:hover { background: #444; border-color: #ff5500; }
-  .play-btn { flex: 2; background: #ff5500 !important; color: white !important; border: none !important; }
-  .btn-trash { flex: 0.5; display: flex; justify-content: center; align-items: center; }
-
-  .btn-fly { color: #ff5500; font-size: 11px; font-weight: bold; padding: 4px 8px; }
-  .btn-del-small { color: #666; font-size: 14px; margin-left: 8px; }
-  .btn-del-small:hover { color: #ff4444; }
-
-  /* Footer Section */
-  .footer { 
-    display: flex; gap: 8px; padding: 12px; 
-    background: #111; border-top: 1px solid #333; 
+  .btn-del-small:hover .icon-svg-white {
+      opacity: 1;
+      filter: invert(34%) sepia(87%) saturate(2450%) hue-rotate(340deg) brightness(95%) contrast(92%); /* Turns red on hover */
   }
 
-  .icon-svg-white {
-    width: 12px;
-    height: 12px;
-    filter: invert(0.95); /* Turns black to off-white */
-    opacity: 0.6;
-    transition: opacity 0.2s;
-}
-
-.btn-del-small:hover .icon-svg-white {
-    opacity: 1;
-    filter: invert(34%) sepia(87%) saturate(2450%) hue-rotate(340deg) brightness(95%) contrast(92%); /* Turns red on hover */
-}
-
-.btn-del-small {
-    background: none;
-    border: none;
-    display: flex;
-    align-items: center;
-    padding: 4px;
-    margin-left: 8px;
-    cursor: pointer;
-}
-
-  /* Clapperboard countdown + 1-frame sync (inside extension popup) */
-  #clapperboard-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: #0a0a0a;
-    z-index: 9999;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+  .btn-del-small {
+      background: none;
+      border: none;
+      display: flex;
+      align-items: center;
+      padding: 4px;
+      margin-left: 8px;
+      cursor: pointer;
   }
-  #clapperboard-overlay.visible { display: flex; }
-  #clapperboard-countdown {
-    font-size: 72px;
-    font-weight: 700;
-    color: #fff;
-    text-shadow: 0 0 20px rgba(255,255,255,0.5);
-    line-height: 1;
-  }
-  #clapperboard-flash {
-    display: none;
-    position: absolute;
-    width: 64px;
-    height: 64px;
-    background: #e00;
-    border: none;
-  }
-  #clapperboard-flash.visible { display: block; }
-</style>
+
+    /* Clapperboard countdown + 1-frame sync (inside extension popup) */
+    #clapperboard-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #0a0a0a;
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    #clapperboard-overlay.visible { display: flex; }
+    #clapperboard-countdown {
+      font-size: 72px;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 0 20px rgba(255,255,255,0.5);
+      line-height: 1;
+    }
+    #clapperboard-flash {
+      display: none;
+      position: absolute;
+      width: 64px;
+      height: 64px;
+      background: #e00;
+      border: none;
+    }
+    #clapperboard-flash.visible { display: block; }
+  </style>
 </head>
-<body>
-  <div id="clapperboard-overlay" aria-hidden="true">
-    <div id="clapperboard-countdown"></div>
-    <div id="clapperboard-flash"></div>
-  </div>
-  <div class="header">
-    <div class="logo-area">
-      <img src="rotate-3d.svg" class="logo-icon" />
-      <div class="logo-text">Dashboard Paraglide</div>
+  <body>
+    <div id="clapperboard-overlay" aria-hidden="true">
+      <div id="clapperboard-countdown"></div>
+      <div id="clapperboard-flash"></div>
     </div>
-    <div style="display:flex; gap: 8px;">
-        <button id="export" class="icon-link">
-          <img src="folder-up.svg" height="20px" class="icon-svg-sm" />
-        </button>
-        <button id="import" class="icon-link">
-          <img src="folder-down.svg" height="20px" class="icon-svg-sm" />
-        </button>
+    <div class="header">
+      <div class="logo-area">
+        <img src="rotate-3d.svg" class="logo-icon" />
+        <div class="logo-text">Dashboard Paraglide</div>
+      </div>
+      <div style="display:flex; gap: 8px;">
+          <button id="export" class="icon-link">
+            <img src="folder-down.svg" height="20px" class="icon-svg-sm" />
+          </button>
+          <button id="import" class="icon-link">
+            <img src="folder-up.svg" height="20px" class="icon-svg-sm" />
+          </button>
+      </div>
     </div>
-  </div>
 
-  <div class="controls">
-    <button id="rec" class="btn-main capture-btn">+ CAPTURE KEYFRAME</button>
-    <div class="control-row">
-      <input type="checkbox" id="sync-toggle">
-      <span class="control-label">Enable Clapperboard</span>
+    <div class="controls">
+      <button id="rec" class="btn-main capture-btn">+ CAPTURE KEYFRAME</button>
+      <div class="control-row">
+        <input type="checkbox" id="sync-toggle">
+        <span class="control-label">Enable Clapperboard</span>
+      </div>
+      <div class="speed-row">
+        <span class="control-label">Playback Speed</span>
+        <input type="range" id="speed-slider" min="1" max="100" value="20">
+        <input type="number" id="speed-number" min="1" max="100" value="20">
+      </div>
     </div>
-    <div class="speed-row">
-      <span class="control-label">Playback Speed</span>
-      <input type="range" id="speed-slider" min="1" max="100" value="20">
-      <input type="number" id="speed-number" min="1" max="100" value="20">
-    </div>
-  </div>
-  <div id="keyframe-list"></div>
+    <div id="keyframe-list"></div>
 
-  <div class="footer">
-    <button id="play" class="btn-main play-btn">PLAY PATH</button>
-    <button id="spin" class="btn-main">SPIN</button>
-    <button id="clear-all" class="btn-main btn-trash">
-      <img src="trash-2.svg" class="icon-svg-red" />
-    </button>
-  </div>
-  
-  <script src="popup.js"></script>
-</body>
+    <div class="footer">
+      <button id="play-stop" class="btn-main play-btn">PLAY PATH</button>
+      <button id="spin" class="btn-main">SPIN</button>
+      <button id="clear-all" class="btn-main btn-trash">
+        <img src="trash-2.svg" class="icon-svg-red" />
+      </button>
+    </div>
+    
+    <script src="popup.js"></script>
+  </body>
 </html>
